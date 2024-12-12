@@ -1,9 +1,7 @@
-import Navigation from "@/components/layouts/navigation";
-
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Navigation />
+    <div>
+      <nav>{/*ここにナビゲーションメニュー*/}</nav>
       <main>{children}</main>
     </div>
   );

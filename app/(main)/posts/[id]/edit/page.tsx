@@ -1,18 +1,14 @@
 import BreadCrumbs from "@/components/layouts/bread-crumbs";
+import { deletePost, updatePost } from "@/lib/actions";
+import { fetchPost } from "@/lib/apis";
 import Image from "next/image";
 import Link from "next/link";
 
-export default async function Page() {
-  const post = {
-    id: 1,
-    caption: "我が家の愛犬🐾",
-    image: "/dogs/dog_1.jpg",
-    user: {
-      name: "user+10",
-      image: "/dogs/dog_10.jpg",
-      description: "こんにちは🐶よろしくお願いします🐕",
-    },
-  };
+export default async function Page({ params }: { params: { id: string } }) {
+  const id = params.id;
+  const post = await fetchPost(id);
+  const updatePostWithId = updatePost.bind(null, id);
+  const deletePostWithId = deletePost.bind(null, id);
   return (
     <>
       <BreadCrumbs title="投稿編集 🐾" />
@@ -48,7 +44,7 @@ export default async function Page() {
                 </div>
               </div>
             </div>
-            <form>
+            <form action={updatePostWithId}>
               <h3 className="mt-2 font-semibold">キャプション</h3>
               <textarea
                 name="caption"
@@ -72,13 +68,8 @@ export default async function Page() {
                 </Link>
               </div>
             </form>
-            <form method="POST">
-              <button
-                type="submit"
-                className="mt-4 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 shadow-sm transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25"
-              >
-                削除
-              </button>
+            <form action={deletePostWithId}>
+              <button type="submit">削除</button>
             </form>
           </div>
         </div>

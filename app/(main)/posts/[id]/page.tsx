@@ -1,31 +1,13 @@
 import BreadCrumbs from "@/components/layouts/bread-crumbs";
+import { createComment } from "@/lib/actions";
+import { fetchPostwithComments } from "@/lib/apis";
 import Image from "next/image";
 import Link from "next/link";
 
-export default async function Page() {
-  const post = {
-    id: 1,
-    caption: "我が家の愛犬🐾",
-    image: "/dogs/dog_1.jpg",
-    createdAt: new Date(),
-    user: {
-      id: 1,
-      name: "user+10",
-      image: "/dogs/dog_10.jpg",
-      description: "こんにちは🐶よろしくお願いします🐕",
-    },
-    comments: [
-      {
-        id: 1,
-        text: "かわいい😍",
-        createdAt: new Date(),
-        user: {
-          name: "user+11",
-          image: "/dogs/dog_8.jpg",
-        },
-      },
-    ],
-  };
+export default async function Page({ params }: { params: { id: string } }) {
+  const id = params.id;
+  const post = await fetchPostwithComments(id);
+  const createCommentWithPostId = createComment.bind(null, id);
   return (
     <>
       <BreadCrumbs title="投稿詳細 🐾" />
@@ -97,7 +79,7 @@ export default async function Page() {
                 );
               })}
             </div>
-            <form>
+            <form action={createCommentWithPostId}>
               <div className="mt-2 flex">
                 <input
                   name="text"
